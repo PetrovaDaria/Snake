@@ -142,6 +142,10 @@ public class GameForm extends JPanel{
             else if (key == KeyEvent.VK_ESCAPE) {
                 window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
             }
+            else if (key == KeyEvent.VK_CONTROL){
+                timer.stop();
+                return;
+            }
             if (direction == null)
                 return;
             nextSnakeDirection = direction;
