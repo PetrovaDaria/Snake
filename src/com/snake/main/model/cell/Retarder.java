@@ -1,5 +1,6 @@
 package com.snake.main.model.cell;
 
+import com.snake.main.model.Game;
 import com.snake.main.model.Snake;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,6 +17,6 @@ public class Retarder extends Food{
             throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, InvocationTargetException {
         snake.setSpeed(Snake.SnakeSpeed.Slow, duration);
-        reincarnate(snake.getField());
+        reincarnate(Game.getInstance().getField());
     }
 }

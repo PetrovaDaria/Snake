@@ -1,12 +1,14 @@
 package com.snake.main.model.cell;
 
 import com.snake.main.model.Field;
+import com.snake.main.model.Game;
 import com.snake.main.model.Snake;
 
 import java.lang.reflect.InvocationTargetException;
 
 public class Apple extends Food {
     private int ticks = 0;
+    public final static int TICKS_TO_ROT = 100;
     public Apple(int x, int y) {
         super(x, y);
     }
@@ -18,14 +20,14 @@ public class Apple extends Food {
         snake.addPart();
         snake.changeScore(1);
         snake.changeEatenApples(1);
-        reincarnate(snake.getField());
+        reincarnate(Game.getInstance().getField());
     }
 
     public void fade(Snake snake)
             throws InvocationTargetException, NoSuchMethodException,
             InstantiationException, IllegalAccessException {
         snake.changeScore(-1);
-        Field field = snake.getField();
+        Field field = Game.getInstance().getField();
         field.removeFood(this);
         field.addFood(Apple.class);
     }
@@ -34,7 +36,11 @@ public class Apple extends Food {
         return ticks;
     }
 
-    public void increaseTicks() {
+    public void increaseTicks() throws NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
         ticks++;
+        if (ticks >= TICKS_TO_ROT) {
+            fade(Game.getInstance().getSnake());
+        }
     }
 }

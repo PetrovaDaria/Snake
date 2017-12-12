@@ -1,6 +1,7 @@
 package com.snake.main;
 
 import com.snake.main.model.Game;
+import com.snake.main.model.cell.Apple;
 import com.snake.main.model.cell.Cell;
 import com.snake.main.model.cell.SnakePart;
 
@@ -96,7 +97,7 @@ public class Painter {
     }
 
     public Color getAppleColor() {
-        final int ticksCount = Game.TICKS_TO_ROT;
+        final int ticksCount = Apple.TICKS_TO_ROT;
         float[] rottenColors = new float[3];
         float[] normalColors = new float[3];
         APPLE_COLOR.getRGBColorComponents(normalColors);

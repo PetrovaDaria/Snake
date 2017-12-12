@@ -1,5 +1,6 @@
 package com.snake.main.model.cell;
 
+import com.snake.main.model.Game;
 import com.snake.main.model.Snake;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +15,6 @@ public class Reverser extends Food {
     public void makeEffect(Snake snake) throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, InvocationTargetException {
         snake.reverse();
-        reincarnate(snake.getField());
+        reincarnate(Game.getInstance().getField());
     }
 }

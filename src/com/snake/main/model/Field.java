@@ -11,6 +11,7 @@ public class Field {
     private Cell[][] field;
     private int height;
     private int width;
+    //убрать
     public boolean hasApple = true;
     public Apple apple;
 
@@ -54,7 +55,6 @@ public class Field {
     public void setCellAt(int i, int j, Cell value) {
         field[i][j] = value;
     }
-
 
     public void addFood(Class<? extends Food> foodClass)
             throws NoSuchMethodException, IllegalAccessException,

@@ -29,7 +29,7 @@ public class GameForm extends JPanel{
 
     public GameForm(){
         try {
-            game = new Game();
+            game = Game.getNewInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,7 +92,7 @@ public class GameForm extends JPanel{
     private void startNewGame() {
         timer.stop();
         try {
-            game = new Game();
+            game = Game.getNewInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,15 +10,27 @@ public class Game {
     private Field field;
     private Snake snake;
     private boolean isOver;
-    public final static int TICKS_TO_ROT = 100;
     public final static int APPLES_TO_NEXT_LEVEL = 100;
 
-    public Game() throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        try {
-            createNewLevel();
-        } catch (Exception e) {
-            throw e;
+    private static Game instance;
+
+    private Game() throws NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
+        createNewLevel();
+    }
+
+    public static Game getInstance() throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
+        if (instance==null){
+            instance = new Game();
         }
+        return instance;
+    }
+
+    public static Game getNewInstance() throws InvocationTargetException, NoSuchMethodException,
+            InstantiationException, IllegalAccessException {
+        instance = new Game();
+        return instance;
     }
 
     public void makeStep() throws NoSuchMethodException, InstantiationException,
@@ -26,12 +38,6 @@ public class Game {
         snake.makeMove();
         isOver = snake.isDead();
         field.apple.increaseTicks();
-        if (field.apple.getTicks() >= TICKS_TO_ROT) {
-            field.apple.fade(snake);
-        }
-        if (snake.getEatenApples() == APPLES_TO_NEXT_LEVEL) {
-
-        }
     }
 
     public void createNewLevel()
@@ -73,15 +79,6 @@ public class Game {
 
     public int getEatenApples() {
         return snake.getEatenApples();
-    }
-
-    public void restartWithEntrance(Snake snake)
-            throws NoSuchMethodException, InstantiationException,
-            IllegalAccessException, InvocationTargetException {
-        isOver = false;
-        field = FieldGenerator.getInstance().generateMaze();
-
-        addFoods();
     }
 
 }
