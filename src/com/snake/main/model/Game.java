@@ -10,7 +10,7 @@ public class Game {
     private Field field;
     private Snake snake;
     private boolean isOver;
-    public final static int APPLES_TO_NEXT_LEVEL = 100;
+    private ArrayList<GameState> gameStates;
 
     private static Game instance;
 
@@ -38,6 +38,9 @@ public class Game {
         snake.makeMove();
         isOver = snake.isDead();
         field.apple.increaseTicks();
+        gameStates.add(new GameState(field, snake.getSnakeParts(), snake.isDead(), snake.getScore(),
+                                     snake.getEatenApples(), snake.getSpeed(), snake.getTimeToNormal(),
+                                     snake.getTicksMod6(), isOver));
     }
 
     public void createNewLevel()
@@ -45,6 +48,10 @@ public class Game {
             InstantiationException, IllegalAccessException {
         field = FieldGenerator.getInstance().generateMaze();
         snake = new Snake(field);
+        gameStates = new ArrayList<>();
+        gameStates.add(new GameState(field, snake.getSnakeParts(), snake.isDead(), snake.getScore(),
+                snake.getEatenApples(), snake.getSpeed(), snake.getTimeToNormal(),
+                snake.getTicksMod6(), isOver));
         addFoods();
     }
 
@@ -55,6 +62,13 @@ public class Game {
         field.addFood(Accelerator.class);
         field.addFood(Retarder.class);
         field.addFood(Reverser.class);
+    }
+
+    public void undoStep(){
+        GameState previousGameState = gameStates.remove(gameStates.size()-1);
+        this.field = previousGameState.getField();
+        this.snake = previousGameState.getSnake();
+        this.isOver = previousGameState.getIsGameOver();
     }
 
     public Field getField() {

@@ -29,6 +29,10 @@ public class Field {
         return width;
     }
 
+    public Cell[][] getField() {
+        return field;
+    }
+
     public Cell getNeighbor(Cell cell, Directions direction){
         if (direction == null)
             return cell;

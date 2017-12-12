@@ -144,6 +144,8 @@ public class GameForm extends JPanel{
             }
             else if (key == KeyEvent.VK_CONTROL){
                 timer.stop();
+                game.undoStep();
+                repaint();
                 return;
             }
             if (direction == null)
