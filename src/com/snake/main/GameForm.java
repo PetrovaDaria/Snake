@@ -2,6 +2,7 @@ package com.snake.main;
 
 import com.snake.main.model.Directions;
 import com.snake.main.model.Game;
+import com.snake.main.model.Snake;
 import com.snake.main.model.cell.*;
 
 import javax.swing.*;
@@ -144,7 +145,15 @@ public class GameForm extends JPanel{
             }
             else if (key == KeyEvent.VK_CONTROL){
                 timer.stop();
-                game.undoStep();
+                int count = 0;
+                if (game.getSnake().getSpeed() == Snake.SnakeSpeed.Normal)
+                    count = 3;
+                else if (game.getSnake().getSpeed() == Snake.SnakeSpeed.Slow)
+                    count = 6;
+                else if (game.getSnake().getSpeed() == Snake.SnakeSpeed.Fast)
+                    count = 2;
+                for (int i=0; i<count; i++)
+                    game.undoStep();
                 repaint();
                 return;
             }
