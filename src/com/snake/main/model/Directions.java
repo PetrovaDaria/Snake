@@ -38,13 +38,13 @@ public enum Directions {
     }
     
 	public static Directions strToDirections(String string) {
-		if (string == "Up") {
+		if (string.equals("Up")) {
 			return Directions.Up;
 		}
-		else if (string == "Left") {
+		else if (string.equals("Left")) {
 			return Directions.Left;
 		}
-		else if (string == "Right") {
+		else if (string.equals("Right")) {
 			return Directions.Right;
 		}
 		else{

@@ -14,7 +14,7 @@ public class Game {
 
     private static Game instance;
 
-    private Game() throws NoSuchMethodException, InstantiationException,
+    public Game() throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, InvocationTargetException {
         createNewLevel();
     }
@@ -63,7 +63,7 @@ public class Game {
     public void undoStep(){
     	if (gameStates.size() > 1) {
 	        String previousGameState = gameStates.remove(gameStates.size()-1);
-	        GameString.undoStep(previousGameState, this.field, this.snake);
+	        GameString.undoStep(previousGameState, this);
     	}
     }
 

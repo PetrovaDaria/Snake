@@ -70,9 +70,9 @@ public class GameString {
 		int count = 0;
 		for (int i = 0; i < field.getHeight(); i++) {
 			for (int j = 0; j < field.getWidth(); j++) {
-				field.getField()[j][i] = strintToCell(stringFieldArray[count]);	
-				if (strintToCell(stringFieldArray[count]) instanceof Apple) {
-					field.apple = (Apple)strintToCell(stringFieldArray[count]);
+				field.getField()[j][i] = stringToCell(stringFieldArray[count]);	
+				if (stringToCell(stringFieldArray[count]) instanceof Apple) {
+					field.apple = (Apple)stringToCell(stringFieldArray[count]);
 				}
 				count ++;
 			}
@@ -82,26 +82,23 @@ public class GameString {
 	static public void stringToSnake(String stringGame, Snake snake, Field field) {
 		String stringSnake = stringGame.split("#")[1];
 		String[] stringFieldArray = stringSnake.split("\n");
+		SnakeHead snakeHead = (SnakeHead)snake.getSnakeParts().get(0);
 		snake.getSnakeParts().clear();
 		for (String stringSnakePiece: stringFieldArray) {
-			if (strintToCell(stringSnakePiece) instanceof SnakeHead) {
-				SnakeHead snakePart = (SnakeHead) strintToCell(stringSnakePiece);
-				field.getField()[snakePart.getX()][snakePart.getY()] = snakePart;
-				snake.getSnakeParts().add(snakePart);
+			SnakePart snakePart = (SnakePart) stringToCell(stringSnakePiece);
+			if (1 == 0) {
+				snakeHead.setX(snakePart.getX());
+				snakeHead.setY(snakePart.getY());
+				field.setCellAt(snakePart.getX(), snakePart.getY(), snakeHead);
 			}
-			else if (strintToCell(stringSnakePiece) instanceof VirtualSnakePart) {
-				VirtualSnakePart snakePart = (VirtualSnakePart) strintToCell(stringSnakePiece);
-				field.getField()[snakePart.getX()][snakePart.getY()] = snakePart;
-				snake.getSnakeParts().add(snakePart);
-			} else {
-				SnakePart snakePart = (SnakePart) strintToCell(stringSnakePiece);
+			else {
 				field.getField()[snakePart.getX()][snakePart.getY()] = snakePart;
 				snake.getSnakeParts().add(snakePart);
 			}
 		}
 	}
 	
-	static private Cell strintToCell(String stringCell) {
+	static public Cell stringToCell(String stringCell) {
 		String strClass = stringCell.split(" ", 0)[0];
 		if (strClass.equals("SnakeHead") || strClass.equals("SnakePart") || strClass.equals("VirtualSnakePart")) {
 			return fromMapSnakePieceString(strClass, Integer.parseInt(stringCell.split(" ", 0)[1]), Integer.parseInt(stringCell.split(" ", 0)[2]), Directions.strToDirections(stringCell.split(" ", 0)[3]), Integer.parseInt(stringCell.split(" ", 0)[4]));
@@ -114,9 +111,8 @@ public class GameString {
 		
 	}
 	
-	static public void undoStep(String stringGame, Field field, Snake snake) {
-		GameString.stringToField(stringGame, field);
-		GameString.stringToSnake(stringGame, snake, field);
+	static public void undoStep(String stringGame, Game game) {
+		GameString.stringToField(stringGame, game.getField());
+		GameString.stringToSnake(stringGame, game.getSnake(), game.getField());
 	}
-	
 }
