@@ -15,7 +15,7 @@ public class Snake {
     private boolean isDead;
     private int score = 0;
     private int eatenApples = 0;
-    private SnakeSpeed speed;
+    private SnakeSpeed speed = SnakeSpeed.Normal;
     private int timeToNormal;
     private int ticksMod6 = 0;
 
@@ -69,9 +69,29 @@ public class Snake {
     public int getTicksMod6(){
         return ticksMod6;
     }
+    
+    public void setTicksMod6(int value) {
+    	this.ticksMod6 = value;
+    }
 
+    public void setScore(int value) {
+    	this.score = value;
+    }
+    
     public enum SnakeSpeed {
         Slow, Normal, Fast;
+    }
+    
+    public SnakeSpeed stringToSpeed(String string) {
+    	if (string.equals("Slow")) {
+    		return SnakeSpeed.Slow; 
+    	}
+    	if (string.equals("Normal")) {
+    		return SnakeSpeed.Normal; 
+    	}
+    	else {
+    		return SnakeSpeed.Fast; 
+    	}
     }
 
     public void setSpeed(SnakeSpeed speed, int time) {

@@ -147,13 +147,13 @@ public class GameForm extends JPanel{
                 timer.stop();
                 int count = 0;
                 if (game.getSnake().getSpeed() == Snake.SnakeSpeed.Normal)
-                    count = 3;
+                	count = 3;
                 else if (game.getSnake().getSpeed() == Snake.SnakeSpeed.Slow)
-                    count = 6;
+                	count = 6;
                 else if (game.getSnake().getSpeed() == Snake.SnakeSpeed.Fast)
-                    count = 2;
+                	count = 2;
                 for (int i=0; i<count; i++)
-                    game.undoStep();
+                game.undoStep();
                 repaint();
                 return;
             }
