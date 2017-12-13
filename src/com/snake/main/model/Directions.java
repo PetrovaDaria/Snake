@@ -36,6 +36,21 @@ public enum Directions {
         }
         return direction;
     }
+    
+	public static Directions strToDirections(String string) {
+		if (string == "Up") {
+			return Directions.Up;
+		}
+		else if (string == "Left") {
+			return Directions.Left;
+		}
+		else if (string == "Right") {
+			return Directions.Right;
+		}
+		else{
+			return Directions.Down;
+		}
+	}
 
     public boolean isOpposite(Directions other) {
         return this.opposite() == other;

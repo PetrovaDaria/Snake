@@ -10,7 +10,7 @@ public class Game {
     private Field field;
     private Snake snake;
     private boolean isOver;
-    private ArrayList<GameState> gameStates;
+    private ArrayList<String> gameStates;
 
     private static Game instance;
 
@@ -38,9 +38,7 @@ public class Game {
         snake.makeMove();
         isOver = snake.isDead();
         field.apple.increaseTicks();
-        gameStates.add(new GameState(field, snake.getSnakeParts(), snake.isDead(), snake.getScore(),
-                                     snake.getEatenApples(), snake.getSpeed(), snake.getTimeToNormal(),
-                                     snake.getTicksMod6(), isOver));
+        gameStates.add(GameString.fieldToString(this));
     }
 
     public void createNewLevel()
@@ -49,9 +47,7 @@ public class Game {
         field = FieldGenerator.getInstance().generateMaze();
         snake = new Snake(field);
         gameStates = new ArrayList<>();
-        gameStates.add(new GameState(field, snake.getSnakeParts(), snake.isDead(), snake.getScore(),
-                snake.getEatenApples(), snake.getSpeed(), snake.getTimeToNormal(),
-                snake.getTicksMod6(), isOver));
+        gameStates.add(GameString.fieldToString(this));
         addFoods();
     }
 
@@ -65,10 +61,10 @@ public class Game {
     }
 
     public void undoStep(){
-        GameState previousGameState = gameStates.remove(gameStates.size()-1);
-        this.field = previousGameState.getField();
-        this.snake = previousGameState.getSnake();
-        this.isOver = previousGameState.getIsGameOver();
+    	if (gameStates.size() > 1) {
+	        String previousGameState = gameStates.remove(gameStates.size()-1);
+	        GameString.undoStep(previousGameState, this.field, this.snake);
+    	}
     }
 
     public Field getField() {

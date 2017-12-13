@@ -7,4 +7,8 @@ public class VirtualSnakePart extends SnakePart {
         super(x, y, direction);
         isWalkable = true;
     }
+    
+    public VirtualSnakePart(int x, int y, Directions direction, int position){
+        super(x, y, direction, position);
+    }
 }

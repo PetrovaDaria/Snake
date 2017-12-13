@@ -33,10 +33,6 @@ public abstract class Cell {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() +
-                "{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return this.getClass().getSimpleName() + ' ' + x + ' ' + y;
     }
 }

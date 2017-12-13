@@ -35,6 +35,10 @@ public class Apple extends Food {
     public int getTicks() {
         return ticks;
     }
+    
+    public void setTicks(int value) {
+        this.ticks = value;
+    }
 
     public void increaseTicks() throws NoSuchMethodException, InstantiationException,
             IllegalAccessException, InvocationTargetException {
@@ -42,5 +46,10 @@ public class Apple extends Food {
         if (ticks >= TICKS_TO_ROT) {
             fade(Game.getInstance().getSnake());
         }
+    }
+    
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + ' ' + x + ' ' + y + ' ' + ticks;
     }
 }

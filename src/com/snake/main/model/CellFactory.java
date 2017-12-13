@@ -16,7 +16,7 @@ public class CellFactory {
     }
 
     @FunctionalInterface
-    private interface CellConstructor{
+	public interface CellConstructor{
         Cell invoke(Integer i, Integer j);
     }
     public static Cell fromMapSymbol(char symbol, int i, int j) {

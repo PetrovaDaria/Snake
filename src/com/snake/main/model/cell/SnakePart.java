@@ -15,6 +15,13 @@ public class SnakePart extends Cell {
         isWalkable = false;
         this.direction = direction;
     }
+    
+    public SnakePart(int x, int y, Directions direction, int position){
+        super(x, y);
+        isWalkable = false;
+        this.direction = direction;
+        this.position = position;
+    }
 
     public Directions getDirection() {
         return direction;
@@ -34,11 +41,6 @@ public class SnakePart extends Cell {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() +
-                "{" +
-                "x=" + x +
-                ", y=" + y +
-                ", direction=" + direction +
-                '}';
+        return this.getClass().getSimpleName() + ' ' + x + ' ' + y + ' ' + direction + ' ' + position;
     }
 }

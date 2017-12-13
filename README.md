@@ -1,5 +1,5 @@
 # Snake
-[![](https://i.ytimg.com/vi/oYd8JYWJ9GA/maxresdefault.jpg)](https://youtu.be/EIyixC9NsLI?t=23s)
+[![](https://i.ytimg.com/vi/oYd8JYWJ9GA/maxresdefault.jpg)](	)
 
 Как задавать карту?
 
