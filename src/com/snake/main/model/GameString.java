@@ -86,10 +86,11 @@ public class GameString {
 		snake.getSnakeParts().clear();
 		for (String stringSnakePiece: stringFieldArray) {
 			SnakePart snakePart = (SnakePart) stringToCell(stringSnakePiece);
-			if (1 == 0) {
+			if (snakePart instanceof SnakeHead) {
 				snakeHead.setX(snakePart.getX());
 				snakeHead.setY(snakePart.getY());
 				field.setCellAt(snakePart.getX(), snakePart.getY(), snakeHead);
+				snake.getSnakeParts().add(snakeHead);
 			}
 			else {
 				field.getField()[snakePart.getX()][snakePart.getY()] = snakePart;
