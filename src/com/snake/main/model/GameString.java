@@ -61,6 +61,7 @@ public class GameString {
         for (int i = 0; i < game.getSnake().getLength(); i++) {
         	result += game.getSnake().getSnakeParts().get(i).toString() + '\n';
         }
+        result += '#' + game.getSnake().getSpeed().toString() + '#' + game.getSnake().getScore() + '#' + game.getSnake().getTimeToNormal() + '#' + game.getSnake().getTicksMod6();
 		return result;
 	}
 	
@@ -86,10 +87,11 @@ public class GameString {
 		snake.getSnakeParts().clear();
 		for (String stringSnakePiece: stringFieldArray) {
 			SnakePart snakePart = (SnakePart) stringToCell(stringSnakePiece);
-			if (1 == 0) {
+			if (snakePart instanceof SnakeHead) {
 				snakeHead.setX(snakePart.getX());
 				snakeHead.setY(snakePart.getY());
 				field.setCellAt(snakePart.getX(), snakePart.getY(), snakeHead);
+				snake.getSnakeParts().add(snakeHead);
 			}
 			else {
 				field.getField()[snakePart.getX()][snakePart.getY()] = snakePart;
@@ -111,8 +113,19 @@ public class GameString {
 		
 	}
 	
+	static public void setSnakeProperties(String stringGame, Game game) {
+		Snake.SnakeSpeed speed = game.getSnake().stringToSpeed(stringGame.split("#", 0)[2]);
+		int score = Integer.parseInt(stringGame.split("#", 0)[3]);
+		int timeToNormal = Integer.parseInt(stringGame.split("#", 0)[4]);
+		int tickMod6 = Integer.parseInt(stringGame.split("#", 0)[5]);
+		game.getSnake().setSpeed(speed, timeToNormal);
+		game.getSnake().setScore(score);
+		game.getSnake().setTicksMod6(tickMod6);
+	}
+	
 	static public void undoStep(String stringGame, Game game) {
 		GameString.stringToField(stringGame, game.getField());
 		GameString.stringToSnake(stringGame, game.getSnake(), game.getField());
+		GameString.setSnakeProperties(stringGame, game);
 	}
 }
