@@ -10,7 +10,7 @@ public class Game {
     private Field field;
     private Snake snake;
     private boolean isOver;
-    private ArrayList<String> gameStates;
+    private TimeMachine timeMachine;
 
     private static Game instance;
 
@@ -38,7 +38,7 @@ public class Game {
         snake.makeMove();
         isOver = snake.isDead();
         field.apple.increaseTicks();
-        gameStates.add(GameString.fieldToString(this));
+        timeMachine.addState(field, snake);
     }
 
     public void createNewLevel()
@@ -46,8 +46,8 @@ public class Game {
             InstantiationException, IllegalAccessException {
         field = FieldGenerator.getInstance().generateMaze();
         snake = new Snake(field);
-        gameStates = new ArrayList<>();
-        gameStates.add(GameString.fieldToString(this));
+        timeMachine = new TimeMachine();
+        timeMachine.addState(field, snake);
         addFoods();
     }
 
@@ -61,10 +61,11 @@ public class Game {
     }
 
     public void undoStep(){
-    	if (gameStates.size() > 1) {
-	        String previousGameState = gameStates.remove(gameStates.size()-1);
-	        GameString.undoStep(previousGameState, this);
-    	}
+        timeMachine.setState(field, snake);
+    }
+
+    public String getCurrentState(){
+        return timeMachine.getState();
     }
 
     public Field getField() {

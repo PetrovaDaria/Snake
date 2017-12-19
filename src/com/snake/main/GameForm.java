@@ -8,7 +8,12 @@ import com.snake.main.model.cell.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class GameForm extends JPanel{
 
@@ -26,6 +31,7 @@ public class GameForm extends JPanel{
     private Timer timer;
     private Directions nextSnakeDirection;
     private Painter painter;
+    private String savedPath;
 
 
     public GameForm(){
@@ -34,6 +40,9 @@ public class GameForm extends JPanel{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String sep = System.getProperty("file.separator");
+        savedPath = System.getProperty("user.dir") + sep +
+                    String.join(sep, "src", "com", "snake", "saved") + sep;
         nextSnakeDirection = game.getSnake().getSnakeDirection();
         fieldWidth = game.getField().getWidth();
         fieldHeight = game.getField().getHeight();
@@ -156,6 +165,30 @@ public class GameForm extends JPanel{
                 game.undoStep();
                 repaint();
                 return;
+            }
+            else if (key == KeyEvent.VK_S){
+                String state = game.getCurrentState();
+                String date = LocalDateTime.now().toString().replaceAll("\\pP", "");
+                File file = new File(savedPath+date+".txt");
+                try {
+                    file.createNewFile();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                FileWriter fr = null;
+                try {
+                    fr = new FileWriter(file);
+                    fr.write(state);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }finally{
+                    try {
+                        if (fr != null)
+                            fr.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
             if (direction == null)
                 return;

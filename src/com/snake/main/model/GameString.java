@@ -14,29 +14,27 @@ import com.snake.main.model.cell.VirtualSnakePart;
 import com.snake.main.model.cell.Wall;
 
 public class GameString {
-    private static HashMap<String, CellConstructor> cellConstructors;
-    static {
-        cellConstructors = new HashMap<>();
-        cellConstructors.put("Wall", Wall::new);
-        cellConstructors.put("Empty", Empty::new);
-        cellConstructors.put("Apple", Apple::new);
-        cellConstructors.put("Accelerator", Accelerator::new);
-        cellConstructors.put("Retarder", Retarder::new);
-        cellConstructors.put("Reverser", Reverser::new);  
-    }
-    private static HashMap<String, SnakePartConstructor> snakePartConstructors;
-    static {
-    	snakePartConstructors = new HashMap<>();
-    	snakePartConstructors.put("SnakeHead", SnakeHead::new);
-    	snakePartConstructors.put("SnakePart", SnakePart::new);
-    	snakePartConstructors.put("VirtualSnakePart", VirtualSnakePart::new);  
-    }
-    
-    public static Cell fromMapCellString(String string, int i, int j) {
+    private HashMap<String, CellConstructor> cellConstructors;
+	private static HashMap<String, SnakePartConstructor> snakePartConstructors;
+	public GameString() {
+		cellConstructors = new HashMap<>();
+		cellConstructors.put("Wall", Wall::new);
+		cellConstructors.put("Empty", Empty::new);
+		cellConstructors.put("Apple", Apple::new);
+		cellConstructors.put("Accelerator", Accelerator::new);
+		cellConstructors.put("Retarder", Retarder::new);
+		cellConstructors.put("Reverser", Reverser::new);
+		snakePartConstructors = new HashMap<>();
+		snakePartConstructors.put("SnakeHead", SnakeHead::new);
+		snakePartConstructors.put("SnakePart", SnakePart::new);
+		snakePartConstructors.put("VirtualSnakePart", VirtualSnakePart::new);
+	}
+
+    public Cell fromMapCellString(String string, int i, int j) {
         return cellConstructors.get(string).invoke(i, j);
     }
     
-    public static SnakePart fromMapSnakePieceString(String string, int i, int j, Directions d, int p) {
+    public SnakePart fromMapSnakePieceString(String string, int i, int j, Directions d, int p) {
         return snakePartConstructors.get(string).invoke(i, j, d, p);
     }
 
@@ -50,37 +48,33 @@ public class GameString {
         SnakePart invoke(Integer i, Integer j, Directions d, Integer p);
     }
     
-	static public String fieldToString(Game game) {
+	public String fieldToString(Field field, Snake snake) {
 		String result = "";
-        for (int i = 0; i < game.getField().getHeight(); i++) {
-        	for (int j = 0; j < game.getField().getWidth(); j++) {
-        		result += game.getField().getField()[j][i].toString() + '\n';
-        	}
-        }
+        for (int i = 0; i < field.getHeight(); i++)
+        	for (int j = 0; j < field.getWidth(); j++)
+        		result += field.getField()[j][i].toString() + '\n';
         result += '#';
-        for (int i = 0; i < game.getSnake().getLength(); i++) {
-        	result += game.getSnake().getSnakeParts().get(i).toString() + '\n';
-        }
-        result += '#' + game.getSnake().getSpeed().toString() + '#' + game.getSnake().getScore() + '#' + game.getSnake().getTimeToNormal() + '#' + game.getSnake().getTicksMod6();
-		return result;
+        for (int i = 0; i < snake.getLength(); i++)
+        	result += snake.getSnakeParts().get(i).toString() + '\n';
+        result += String.format("#%s#%s#%s#%s", snake.getSpeed().toString(), snake.getScore(),
+								snake.getTimeToNormal(), snake.getTicksMod6());
+        return result;
 	}
 	
-	static public void stringToField(String stringGame, Field field) {
+	public void stringToField(String stringGame, Field field) {
 		String stringField = stringGame.split("#")[0];
 		String[] stringFieldArray = stringField.split("\n");
 		int count = 0;
-		for (int i = 0; i < field.getHeight(); i++) {
+		for (int i = 0; i < field.getHeight(); i++)
 			for (int j = 0; j < field.getWidth(); j++) {
 				field.getField()[j][i] = stringToCell(stringFieldArray[count]);	
-				if (stringToCell(stringFieldArray[count]) instanceof Apple) {
+				if (stringToCell(stringFieldArray[count]) instanceof Apple)
 					field.apple = (Apple)stringToCell(stringFieldArray[count]);
-				}
 				count ++;
 			}
-		}
 	}
 	
-	static public void stringToSnake(String stringGame, Snake snake, Field field) {
+	public void stringToSnake(String stringGame, Snake snake, Field field) {
 		String stringSnake = stringGame.split("#")[1];
 		String[] stringFieldArray = stringSnake.split("\n");
 		SnakeHead snakeHead = (SnakeHead)snake.getSnakeParts().get(0);
@@ -100,32 +94,43 @@ public class GameString {
 		}
 	}
 	
-	static public Cell stringToCell(String stringCell) {
+	public Cell stringToCell(String stringCell) {
 		String strClass = stringCell.split(" ", 0)[0];
 		if (strClass.equals("SnakeHead") || strClass.equals("SnakePart") || strClass.equals("VirtualSnakePart")) {
-			return fromMapSnakePieceString(strClass, Integer.parseInt(stringCell.split(" ", 0)[1]), Integer.parseInt(stringCell.split(" ", 0)[2]), Directions.strToDirections(stringCell.split(" ", 0)[3]), Integer.parseInt(stringCell.split(" ", 0)[4]));
+			return fromMapSnakePieceString(strClass, Integer.parseInt(stringCell.split(" ", 0)[1]),
+											Integer.parseInt(stringCell.split(" ", 0)[2]),
+											Directions.strToDirections(stringCell.split(" ", 0)[3]),
+											Integer.parseInt(stringCell.split(" ", 0)[4]));
 		} else if (strClass.equals("Apple")) {
-			Apple apple = (Apple) fromMapCellString(strClass, Integer.parseInt(stringCell.split(" ", 0)[1]), Integer.parseInt(stringCell.split(" ", 0)[2]));
+			Apple apple = (Apple) fromMapCellString(strClass, Integer.parseInt(stringCell.split(" ", 0)[1]),
+													Integer.parseInt(stringCell.split(" ", 0)[2]));
 			apple.setTicks(Integer.parseInt(stringCell.split(" ", 0)[3]));
 			return apple;
 		}
-		return fromMapCellString(strClass, Integer.parseInt(stringCell.split(" ", 0)[1]), Integer.parseInt(stringCell.split(" ", 0)[2]));
+		return fromMapCellString(strClass, Integer.parseInt(stringCell.split(" ", 0)[1]),
+									Integer.parseInt(stringCell.split(" ", 0)[2]));
 		
 	}
 	
-	static public void setSnakeProperties(String stringGame, Game game) {
-		Snake.SnakeSpeed speed = game.getSnake().stringToSpeed(stringGame.split("#", 0)[2]);
+	public void setSnakeProperties(String stringGame, Snake snake) {
+		Snake.SnakeSpeed speed = snake.stringToSpeed(stringGame.split("#", 0)[2]);
 		int score = Integer.parseInt(stringGame.split("#", 0)[3]);
 		int timeToNormal = Integer.parseInt(stringGame.split("#", 0)[4]);
 		int tickMod6 = Integer.parseInt(stringGame.split("#", 0)[5]);
-		game.getSnake().setSpeed(speed, timeToNormal);
-		game.getSnake().setScore(score);
-		game.getSnake().setTicksMod6(tickMod6);
+		snake.setSpeed(speed, timeToNormal);
+		snake.setScore(score);
+		snake.setTicksMod6(tickMod6);
 	}
-	
-	static public void undoStep(String stringGame, Game game) {
-		GameString.stringToField(stringGame, game.getField());
-		GameString.stringToSnake(stringGame, game.getSnake(), game.getField());
-		GameString.setSnakeProperties(stringGame, game);
+	/*
+	public void undoStep(String stringGame, Game game) {
+		this.stringToField(stringGame, game.getField());
+		this.stringToSnake(stringGame, game.getSnake(), game.getField());
+		this.setSnakeProperties(stringGame, game);
+	}
+	*/
+	public void undoStep(String stringGame, Field field, Snake snake) {
+		this.stringToField(stringGame, field);
+		this.stringToSnake(stringGame, snake, field);
+		this.setSnakeProperties(stringGame, snake);
 	}
 }
