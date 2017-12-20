@@ -4,16 +4,20 @@ import com.snake.main.model.Directions;
 import com.snake.main.model.Game;
 import com.snake.main.model.Snake;
 import com.snake.main.model.cell.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.nio.Buffer;
+import java.util.ArrayList;
 
 public class GameForm extends JPanel{
 
@@ -31,7 +35,6 @@ public class GameForm extends JPanel{
     private Timer timer;
     private Directions nextSnakeDirection;
     private Painter painter;
-    private String savedPath;
 
 
     public GameForm(){
@@ -40,9 +43,6 @@ public class GameForm extends JPanel{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String sep = System.getProperty("file.separator");
-        savedPath = System.getProperty("user.dir") + sep +
-                    String.join(sep, "src", "com", "snake", "saved") + sep;
         nextSnakeDirection = game.getSnake().getSnakeDirection();
         fieldWidth = game.getField().getWidth();
         fieldHeight = game.getField().getHeight();
@@ -79,6 +79,34 @@ public class GameForm extends JPanel{
                 }
             }
         }
+    }
+    
+    private class ChooserFile extends JFrame{
+    	private  JFileChooser fileChooser = null;
+    	void askSaveGameFile() throws IOException {
+    		fileChooser = new JFileChooser();
+    		fileChooser.setDialogTitle("Сохранить");
+        	setSize(600, 400);
+        	fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        	int ret = fileChooser.showSaveDialog(this);
+        	if (ret == JFileChooser.APPROVE_OPTION) {
+        	    File file = fileChooser.getSelectedFile();
+        	    file.createNewFile();
+        	    game.writeLastMoves(file);
+        	}
+    	}
+    	
+    	void askLoadGameFile() throws IOException{
+    		fileChooser = new JFileChooser();
+        	setSize(600, 400);
+        	fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        	int ret = fileChooser.showDialog(null, "Загрузить");
+        	if (ret == JFileChooser.APPROVE_OPTION) {
+        	    File file = fileChooser.getSelectedFile();
+        	    game.readLastMoves(file);
+        	}
+        	game.undoStep();
+    	}
     }
 
     private class RepaintAction implements ActionListener{
@@ -166,29 +194,31 @@ public class GameForm extends JPanel{
                 repaint();
                 return;
             }
-            else if (key == KeyEvent.VK_S){
-                String state = game.getCurrentState();
-                String date = LocalDateTime.now().toString().replaceAll("\\pP", "");
-                File file = new File(savedPath+date+".txt");
-                try {
-                    file.createNewFile();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-                FileWriter fr = null;
-                try {
-                    fr = new FileWriter(file);
-                    fr.write(state);
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }finally{
-                    try {
-                        if (fr != null)
-                            fr.close();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
+            else if (key == KeyEvent.VK_F9) {
+            	timer.stop();
+            	ChooserFile askLoadGameFile = new ChooserFile();
+            	try {
+					askLoadGameFile.askLoadGameFile();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            	timer.start();
+            	repaint();
+            	timer.stop();
+            	return;
+            }
+            
+            else if (key == KeyEvent.VK_F5) {
+            	timer.stop();
+            	ChooserFile askSaveGameFile = new ChooserFile();
+            	try {
+					askSaveGameFile.askSaveGameFile();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+            	return;
             }
             if (direction == null)
                 return;

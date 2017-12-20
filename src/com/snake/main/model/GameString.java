@@ -52,10 +52,10 @@ public class GameString {
 		String result = "";
         for (int i = 0; i < field.getHeight(); i++)
         	for (int j = 0; j < field.getWidth(); j++)
-        		result += field.getField()[j][i].toString() + '\n';
+        		result += field.getField()[j][i].toString() + '@';
         result += '#';
         for (int i = 0; i < snake.getLength(); i++)
-        	result += snake.getSnakeParts().get(i).toString() + '\n';
+        	result += snake.getSnakeParts().get(i).toString() + '@';
         result += String.format("#%s#%s#%s#%s", snake.getSpeed().toString(), snake.getScore(),
 								snake.getTimeToNormal(), snake.getTicksMod6());
         return result;
@@ -63,7 +63,7 @@ public class GameString {
 	
 	public void stringToField(String stringGame, Field field) {
 		String stringField = stringGame.split("#")[0];
-		String[] stringFieldArray = stringField.split("\n");
+		String[] stringFieldArray = stringField.split("@");
 		int count = 0;
 		for (int i = 0; i < field.getHeight(); i++)
 			for (int j = 0; j < field.getWidth(); j++) {
@@ -76,7 +76,7 @@ public class GameString {
 	
 	public void stringToSnake(String stringGame, Snake snake, Field field) {
 		String stringSnake = stringGame.split("#")[1];
-		String[] stringFieldArray = stringSnake.split("\n");
+		String[] stringFieldArray = stringSnake.split("@");
 		SnakeHead snakeHead = (SnakeHead)snake.getSnakeParts().get(0);
 		snake.getSnakeParts().clear();
 		for (String stringSnakePiece: stringFieldArray) {

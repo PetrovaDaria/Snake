@@ -25,4 +25,15 @@ public class TimeMachine {
     public String getState(){
         return gameStates.get(gameStates.size()-1);
     }
+    
+    public ArrayList<String> getGameStates() {
+    	return this.gameStates;
+    }
+    
+    public void setGameStates(ArrayList<String> lines) {
+    	this.gameStates.clear();
+    	for (String line: lines) {
+    		this.gameStates.add(line);
+    	}
+    }
 }
